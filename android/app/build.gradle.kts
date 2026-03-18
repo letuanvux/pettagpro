@@ -27,14 +27,21 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        versionName = applicationId + "-" + flutter.versionName + "-" + new Date().format("yyyyMMddHHmmss")
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.debug
+        }
+        // Thay đổi tên app trong thư mục rebuild\app\outputs\apk\release
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                def newName = "${versionName}-${variant.name}.apk"
+                outputFileName = newName
+            }
         }
     }
 }
